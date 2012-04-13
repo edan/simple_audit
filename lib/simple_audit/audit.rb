@@ -4,7 +4,7 @@ module SimpleAudit #:nodoc:
   class Audit < ActiveRecord::Base
     belongs_to :auditable,  :polymorphic => true
     belongs_to :user,       :polymorphic => true
-    serialize  :change_log
+    serialize  :change_log, Hash
   
     # Computes the differences of the change logs between two audits.
     #

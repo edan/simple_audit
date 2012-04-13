@@ -17,11 +17,11 @@ module SimpleAudit #:nodoc:
             changes = if older_audit.present?
               audit.delta(older_audit).sort{|x,y| audited_model.class.human_attribute_name(x.first) <=> audited_model.class.human_attribute_name(y.first)}.collect do |k, v|                
                 next if k.to_s == 'created_at' || k.to_s == 'updated_at'
-                "\n" + 
-                audited_model.class.human_attribute_name(k) +
-                ":" +
-                content_tag(:span, v.last, :class => 'current') +
-                content_tag(:span, v.first, :class => 'previous')
+		content_tag(:div, :class => 'change') do
+  		  content_tag(:span, "#{audited_model.class.human_attribute_name(k).downcase}: ", :class => "field_name") +
+		  content_tag(:span, v.last, :class => 'current') +
+		  content_tag(:span, v.first, :class => 'previous')
+		end
               end
             else
               audit.change_log.sort{|x,y| audited_model.class.human_attribute_name(x.first) <=> audited_model.class.human_attribute_name(y.first)}.reject{|k, v| v.blank?}.collect {|k, v| "\n#{audited_model.class.human_attribute_name(k)}: #{v}"}
